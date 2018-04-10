@@ -1,31 +1,24 @@
 /* eslint react/no-multi-comp:0, no-console:0 */
 
-import 'rc-calendar/assets/index.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+
+import 'rc-calendar/assets/index.css';
 import Calendar from 'rc-calendar';
 import DatePicker from 'rc-calendar/lib/Picker';
 import enUS from './locale/en_US';
 import 'rc-time-picker/assets/index.css';
 import TimePickerPanel from 'rc-time-picker/lib/Panel';
-
 import moment from 'moment';
 
-const format = 'YYYY-MM-DD HH:mm:ss';
-//const cn = location.search.indexOf('cn') !== -1;
-
+// 'YYYY-MM-DD HH:mm:ss';
+const format = 'DD-MMMM-YYYY HH:mm:ss';
 const now = moment();
-// if (cn) {
-//   now.locale('zh-cn').utcOffset(8);
-// } else {
-//   now.locale('en-gb').utcOffset(0);
-// }
-
 function getFormat(time) {
-  return time ? format : 'YYYY-MM-DD';
+  return time ? format : 'DD-MMMM-YYYY';
 }
-
 
 const defaultCalendarValue = now.clone();
 defaultCalendarValue.add(-1, 'month');
@@ -49,31 +42,21 @@ function disabledTime(date) {
 }
 
 
-function disabledDate(current) {
-  if (!current) {
-    // allow empty select
-    return false;
-  }
-  const date = moment();
-  date.hour(0);
-  date.minute(0);
-  date.second(0);
-  return current.valueOf() < date.valueOf();  // can not select days before today
-}
-
 export default class Demo extends React.Component {
+
+  //If it is date time it shows the time else just the date
   static propTypes = {
     defaultValue: PropTypes.object,
     defaultCalendarValue: PropTypes.object,
+    isDateTime: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      showTime: true,
-      showDateInput: true,
-      disabled: false,
+      showTime: props.isDateTime,
+      showDateInput: !props.isDateTime,
       value: props.defaultValue,
     };
   }
@@ -85,23 +68,6 @@ export default class Demo extends React.Component {
     });
   }
 
-  onShowTimeChange = (e) => {
-    this.setState({
-      showTime: e.target.checked,
-    });
-  }
-
-  onShowDateInputChange = (e) => {
-    this.setState({
-      showDateInput: e.target.checked,
-    });
-  }
-
-  toggleDisabled = () => {
-    this.setState({
-      disabled: !this.state.disabled,
-    });
-  }
 
   render() {
     const state = this.state;
@@ -114,45 +80,8 @@ export default class Demo extends React.Component {
       timePicker={state.showTime ? timePickerElement : null}
       defaultValue={this.props.defaultCalendarValue}
       showDateInput={state.showDateInput}
-      disabledDate={disabledDate}
     />);
     return (<div style={{ width: 400, margin: 20 }}>
-      <div style={{ marginBottom: 10 }}>
-        <label>
-          <input
-            type="checkbox"
-            checked={state.showTime}
-            onChange={this.onShowTimeChange}
-          />
-          showTime
-        </label>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label>
-          <input
-            type="checkbox"
-            checked={state.showDateInput}
-            onChange={this.onShowDateInputChange}
-          />
-          showDateInput
-        </label>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label>
-          <input
-            checked={state.disabled}
-            onChange={this.toggleDisabled}
-            type="checkbox"
-          />
-          disabled
-        </label>
-      </div>
-      <div style={{
-        boxSizing: 'border-box',
-        position: 'relative',
-        display: 'block',
-        lineHeight: 1.5,
-        marginBottom: 22,
-      }}
-      >
         <DatePicker
           animation="slide-up"
           disabled={state.disabled}
@@ -166,7 +95,7 @@ export default class Demo extends React.Component {
                 <span tabIndex="0">
                 <input
                   placeholder="please select"
-                  style={{ width: 250 }}
+                  style={{ width: 150 }}
                   disabled={state.disabled}
                   readOnly
                   tabIndex="-1"
@@ -178,17 +107,6 @@ export default class Demo extends React.Component {
             }
           }
         </DatePicker>
-      </div>
     </div>);
   }
-}
-
-function onStandaloneSelect(value) {
-  console.log('onStandaloneSelect');
-  console.log(value && value.format(format));
-}
-
-function onStandaloneChange(value) {
-  console.log('onStandaloneChange');
-  console.log(value && value.format(format));
 }

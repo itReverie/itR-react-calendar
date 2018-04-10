@@ -18,7 +18,8 @@ class App extends Component {
     }}
   >
       <div style={{ float: 'left', width: 300 }}>
-        <AdjectiveCalendar defaultValue={now} isDateTime={true} />
+        Date Time: <AdjectiveCalendar  showTime={true} />
+        Date:  <AdjectiveCalendar />
       </div>
   </div>);
   }

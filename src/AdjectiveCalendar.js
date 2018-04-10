@@ -48,15 +48,15 @@ export default class Demo extends React.Component {
   static propTypes = {
     defaultValue: PropTypes.object,
     defaultCalendarValue: PropTypes.object,
-    isDateTime: PropTypes.bool.isRequired,
+    showTime: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      showTime: props.isDateTime,
-      showDateInput: !props.isDateTime,
+      showTime: props.showTime,
+      showDateInput: true,
       value: props.defaultValue,
     };
   }
@@ -74,7 +74,7 @@ export default class Demo extends React.Component {
     const calendar = (<Calendar
       locale={enUS}
       style={{ zIndex: 1000 }}
-      dateInputPlaceholder="please input"
+      dateInputPlaceholder={state.showTime?'select date & time':'select date'}
       formatter={getFormat(state.showTime)}
       disabledTime={state.showTime ? disabledTime : null}
       timePicker={state.showTime ? timePickerElement : null}
@@ -94,7 +94,7 @@ export default class Demo extends React.Component {
               return (
                 <span tabIndex="0">
                 <input
-                  placeholder="please select"
+                  placeholder={state.showTime?'select date & time':'select date'}
                   style={{ width: 150 }}
                   disabled={state.disabled}
                   readOnly

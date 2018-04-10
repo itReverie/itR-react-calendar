@@ -13,7 +13,6 @@ import 'rc-time-picker/assets/index.css';
 import TimePickerPanel from 'rc-time-picker/lib/Panel';
 import moment from 'moment';
 
-// 'YYYY-MM-DD HH:mm:ss';
 const format = 'DD-MMMM-YYYY HH:mm:ss';
 const now = moment();
 function getFormat(time) {
@@ -26,7 +25,6 @@ defaultCalendarValue.add(-1, 'month');
 const timePickerElement = <TimePickerPanel defaultValue={moment('00:00:00', 'HH:mm:ss')} />;
 
 function disabledTime(date) {
-  console.log('disabledTime', date);
   if (date && (date.date() === 15)) {
     return {
       disabledHours() {
@@ -48,7 +46,7 @@ export default class Demo extends React.Component {
   static propTypes = {
     defaultValue: PropTypes.object,
     defaultCalendarValue: PropTypes.object,
-    showTime: PropTypes.bool.isRequired,
+    showTime: PropTypes.bool,
   }
 
   constructor(props) {
@@ -62,10 +60,20 @@ export default class Demo extends React.Component {
   }
 
   onChange = (value) => {
-    console.log('DatePicker change: ', (value && value.format(format)));
-    this.setState({
-      value,
-    });
+
+    let format=getFormat(this.state.showTime);
+    let now=moment().format(format);
+    let dateSelected=value.format(format);
+
+    if(dateSelected===now){
+      console.log('Now:',now);
+      console.log('set GETTODAY()');
+    }
+    else{
+      console.log('Value:', dateSelected);
+      console.log('set NORMAL');
+    }
+    this.setState({value});
   }
 
 

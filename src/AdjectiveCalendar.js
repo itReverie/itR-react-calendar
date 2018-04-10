@@ -5,13 +5,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import 'rc-calendar/assets/index.css';
+import './AdjectiveCalendar.css';
 import Calendar from 'rc-calendar';
 import DatePicker from 'rc-calendar/lib/Picker';
 import enUS from './locale/en_US';
 import 'rc-time-picker/assets/index.css';
 import TimePickerPanel from 'rc-time-picker/lib/Panel';
 import moment from 'moment';
+import styled from "styled-components";
 
 const format = 'DD-MMMM-YYYY HH:mm:ss';
 const now = moment();
@@ -40,7 +41,7 @@ function disabledTime(date) {
 }
 
 
-export default class Demo extends React.Component {
+export default class AdjectiveCalendar extends React.Component {
 
   //If it is date time it shows the time else just the date
   static propTypes = {
@@ -60,7 +61,9 @@ export default class Demo extends React.Component {
   }
 
   onChange = (value) => {
-
+    if(value===null){
+      return;
+    }
     let format=getFormat(this.state.showTime);
     let now=moment().format(format);
     let dateSelected=value.format(format);
@@ -89,7 +92,7 @@ export default class Demo extends React.Component {
       defaultValue={this.props.defaultCalendarValue}
       showDateInput={state.showDateInput}
     />);
-    return (<div style={{ width: 400, margin: 20 }}>
+    return (
         <DatePicker
           animation="slide-up"
           disabled={state.disabled}
@@ -103,11 +106,10 @@ export default class Demo extends React.Component {
                 <span tabIndex="0">
                 <input
                   placeholder={state.showTime?'select date & time':'select date'}
-                  style={{ width: 150 }}
                   disabled={state.disabled}
                   readOnly
                   tabIndex="-1"
-                  className="ant-calendar-picker-input ant-input"
+                  className="dateTimeAdjective ant-calendar-picker-input ant-input"
                   value={value && value.format(getFormat(state.showTime)) || ''}
                 />
                 </span>
@@ -115,6 +117,6 @@ export default class Demo extends React.Component {
             }
           }
         </DatePicker>
-    </div>);
+    );
   }
 }
